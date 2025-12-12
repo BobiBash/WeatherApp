@@ -4,7 +4,15 @@ body {
     align-items: center;
     margin: auto;
     padding-top: 100px;
-    background-color: #a0d9ef;
+    background-color: #BADBE6;
+}
+h1 {
+    text-align: center;
+    width: 100%;
+    position: relative;
+    z-index: 5;
+    margin-top: 0;
+    padding-top: 20px;
 }
 .weather-container {
     border: black solid 2px;
@@ -12,7 +20,7 @@ body {
     border-radius: 10px;
     width: 15%;
     height: 290px;
-    background-color: #cfecf7;
+    background-color: #BADBE6;
     box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
 }
 .weather-container p {
@@ -25,12 +33,12 @@ body {
     align-items: center;
     width: 100%;
     height: 500px;
-    background-color: #f5b15d;
+    background-color: #76B7CD;
     overflow: hidden;
 }
 #hourly_forecast_div {
     height: 100%;
-    overflow-y: auto
+    overflow-y: auto;
 }
 .hourly-wrapper {
     justify-content: center;
@@ -41,7 +49,7 @@ body {
     overflow: hidden;
     border: black solid 2px;
     border-radius: 10px;
-    background-color: #cfecf7;
+    background-color: #BADBE6;
     box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
 }
 .hour-row {
@@ -66,6 +74,7 @@ body {
     position: fixed;
     top: 0;
     left: 0;
+    background-color: #F1ECE6;
     border: black solid 2px;
     width: 100%;
     z-index: 10;
@@ -146,12 +155,12 @@ body {
 }
 
 
-.cloud1 { top: 15%; left: 10%; }
+.cloud1 { top: 35%; left: 22%; }
 .cloud2 { top: 75%; right: 35%; }
 .cloud3 { top: 75%; left: 20%; }
-.cloud4 { top: 15%; right: 25%; }
+.cloud4 { top: 23%; right: 40%; }
 .cloud5 { top: 10%; left: 30%; }
-.cloud6 { top: 6%; right: 16%; }
+.cloud6 { top: 40%; right: 25%; }
 .cloud7 { top: 83%; left: 38%; }
 .cloud8 { top: 83%; right: 20%; }
 
@@ -160,12 +169,12 @@ body {
     position: absolute;
     width: 120px;
     height: 120px;
-    background: #FFD700;
+    background: #D98326;
     border-radius: 50%;
     box-shadow: 0 0 40px rgba(255, 215, 0, 0.6);
     z-index: 0;
-    left: 10%;
-    top: 8%;
+    left: 22%;
+    top: 27%;
 }
 
 
@@ -189,6 +198,6 @@ div::-webkit-scrollbar-track {
 }
 
 div::-webkit-scrollbar-thumb {
-  background-color: #E97451;
-  outline: 1px solid red;
+  background-color: #F1ECE6;
+  outline: 1px solid #F1ECE6;
 }

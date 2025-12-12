@@ -18,6 +18,7 @@ def search_weather(request):
     return render(request, "search.html")
 
 def city_weather(request, city):
+    load_dotenv()
     api_key = os.getenv("OPENWEATHER_API_KEY")
 
     url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}&units=metric"
@@ -66,15 +67,17 @@ def city_weather(request, city):
     return render(request, "weather.html", context)
 
 def autocomplete(request):
+    load_dotenv()
+    api_key = os.getenv("OPENWEATHER_API_KEY")
     query = request.GET.get('q', '')
     if len(query) < 2:
         return JsonResponse([], safe=False)
 
-    url = f"http://api.openweathermap.org/geo/1.0/direct?q={query}&limit=5&appid=96e2de8e2304115a08eaf539930edcc3&units=metric"
+    url = f"http://api.openweathermap.org/geo/1.0/direct?q={query}&limit=5&appid={api_key}&units=metric"
     response = requests.get(url)
     cities = response.json()
 
-    suggestions = [f"{city['name']}, {city.get('state', '')}, {city['country']}"
+    suggestions = [f"{city['name']} - {city['country']}"
                    for city in cities]
 
     return JsonResponse(suggestions, safe=False)
