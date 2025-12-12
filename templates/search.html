@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'search_style.css' %}">
+</head>
+<body>
+    <div class="sun"></div>
+    <div class="cloud cloud-large cloud1"></div>
+    <div class="cloud cloud-medium cloud2"></div>
+    <div class="cloud cloud-small cloud3"></div>
+    <div class="cloud cloud-large cloud4"></div>
+    <div class="cloud cloud-medium cloud5"></div>
+    <div class="cloud cloud-small cloud6"></div>
+    <div class="cloud cloud-medium cloud7"></div>
+    <div class="cloud cloud-large cloud8"></div>
+    <div class="cloud"></div>
+
+    <div id="heading">
+        <h1 class="search-heading">Weather App
+        <img class="heading-icon" src="{% static 'imgs/name-icon.png' %}" alt="Weather">
+        </h1>
+    </div>
+    <div id="center-wrapper">
+        <div id="site-buttons">
+            <nav>
+                <a href="http://127.0.0.1:8000">Home</a>
+            </nav>
+        </div>
+        <div id="divcontainer">
+            <form id="searchbar" method="GET" action="{% url 'search_weather' %}">
+            <div class="search-wrapper">
+            <input type="text" id="cityInput" name="city" list="citySuggestions" placeholder="Enter a city..." required>
+            <button id="searchbutton" type="submit"><i id="searchIcon" class="fa-solid fa-magnifying-glass"></i></button>
+            </div>
+            <datalist id="citySuggestions" onclick=""></datalist>
+            </form>
+        </div>
+    </div>
+    {% load static %}
+    <script src="{% static 'autocompletion.js' %}"></script>
+    <script src="{% static 'search_on_click.js' %}"></script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'weather_style.css' %}">
+</head>
+<body>
+    <div class="sun"></div>
+    <div class="cloud cloud-large cloud1"></div>
+    <div class="cloud cloud-medium cloud2"></div>
+    <div class="cloud cloud-small cloud3"></div>
+    <div class="cloud cloud-large cloud4"></div>
+    <div class="cloud cloud-medium cloud5"></div>
+    <div class="cloud cloud-small cloud6"></div>
+    <div class="cloud cloud-medium cloud7"></div>
+    <div class="cloud cloud-large cloud8"></div>
+    <div class="cloud"></div>
+    <h1>No results found</h1>
+    <div id="weather_div">
+        <div class="weather-container">
+        </div>
+        <div class="hourly-wrapper">
+            <div id="hourly_forecast_div">
+                {% for hour in hourly_forecast %}
+                    <div class="hour-row">
+                        <span class="hour">{{ hour.time }}</span>
+                        <span class="separator">-</span>
+                        <span class="temp">{{ hour.temp }}°C</span>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>
