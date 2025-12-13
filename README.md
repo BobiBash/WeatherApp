@@ -15,11 +15,6 @@ Simple Django-based weather application that uses Open-Meteo APIs to show curren
 - CSS
 - Pip for dependency management
 
-## Repository
-- Current branch: `master`
-- Remote: `origin` — `https://github.com/BobiBash/WeatherApp.git`
-- IDE: PyCharm (project configured for Windows)
-
 ## Quick setup (Windows)
 1. Clone repository:
    - `git clone https://github.com/BobiBash/WeatherApp.git`
