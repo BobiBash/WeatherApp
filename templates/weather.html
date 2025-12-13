@@ -19,20 +19,34 @@
     <div class="cloud"></div>
     <h1>Weather for {{ city|title }}</h1>
     <div id="weather_div">
-        <div id="site-buttons">
+        <div id="bottom_site-buttons">
             <nav>
-                <a href="{% url 'search_weather' %}" class="home-button">Home</a>
+                <ul>
+                    <li class="github-container"><a href="https://github.com/BobiBash"><img class="github-button" src="{% static 'imgs/Github_Logo.png' %}" alt="GitHub"></a></li>
+                </ul>
             </nav>
         </div>
-        <div class="weather-container">
-            <p>Temperature: {{ temperature }}°C</p>
-            <p>Conditions: {{ description|title }}</p>
-            <p>Humidity: {{ humidity }}%</p>
-            <p>Wind Speed: {{ wind_speed }} m/s</p>
-            <p>Visibility: {{ visibility }}</p>
-            <p>Country: {{ country }}</p>
-            <p>Sunset: {{ sunset }}</p>
-            <p>Sunrise: {{ sunrise }}</p>
+        <div id="site-buttons">
+            <nav>
+                <ul>
+                    <li><a href="{% url 'search_weather' %}" class="home-button">Home</a></li>
+                </ul>
+            </nav>
+        </div>
+        <div class="weather-wrapper">
+            <div class="weather-container">
+                <p>Temperature: {{ temperature }}°C</p>
+                <p>Feels like: {{ apparent_temperature }}°C</p>
+                <p>Condition: {{ description }}</p>
+                <p>Air Quality: {{ air_quality }}</p>
+                <p>Humidity: {{ relative_humidity }}%</p>
+                <p>Precipitation: {{ precipitation_chance }}%</p>
+                <p>Rain: {{ rain }}mm</p>
+                <p>WindSpeed: {{ wind_speed }}km/h</p>
+                <p>WindDirection: {{ wind_direction }}°</p>
+                <p>Sunset: {{ sunset }}</p>
+                <p>Sunrise: {{ sunrise }}</p>
+            </div>
         </div>
         <div class="hourly-wrapper">
             <div id="hourly_forecast_div">
@@ -41,6 +55,7 @@
                         <span class="hour">{{ hour.time }}</span>
                         <span class="separator">-</span>
                         <span class="temp">{{ hour.temp }}°C</span>
+                        <span class="rain_probability">💧{{ hour.rain_chance }}%</span>
                     </div>
                 {% endfor %}
             </div>
