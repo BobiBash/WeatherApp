@@ -46,5 +46,5 @@ Simple Django-based weather application that uses Open-Meteo APIs to show curren
 <img width="1856" height="918" alt="image" src="https://github.com/user-attachments/assets/9aa3985d-72bb-4201-866a-9909dcd087f8" />
 
 ## Future Enhancements
-- [ ] Fix autocompletion
-- [ ] Dark mode / Light mode toggle
+- Fix autocompletion
+- Dark mode / Light mode toggle
