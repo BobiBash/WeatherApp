@@ -5,6 +5,10 @@ import requests
 from datetime import datetime
 from dotenv import load_dotenv
 import os
+
+from requests import ReadTimeout
+
+
 # Create your views here.
 
 
@@ -21,7 +25,10 @@ def city_weather(request, city):
 
 
     url = f"https://geocoding-api.open-meteo.com/v1/search?name={city}&count=10&language=en&format=json"
-    response = requests.get(url).json()
+    try:
+        response = requests.get(url).json()
+    except ReadTimeout:
+        return "Something failed. Please try again later."
 
     if not response.get('results'):
         return render(request, "error.html", {
@@ -62,7 +69,7 @@ def city_weather(request, city):
 
     forecast_response = requests.get(forecast_url, params=params).json()
 
-    print(forecast_response["current"])
+
 
 
     #hourly stuff
@@ -94,35 +101,134 @@ def city_weather(request, city):
 
 
     weather_mapping = {
-        0: "Clear sky",
-        1: "Mainly clear",
-        2: "Partly cloudy",
-        3: "Overcast",
-        45: "Fog",
-        48: "Depositing rime fog",
-        51: "Light drizzle",
-        53: "Moderate drizzle",
-        55: "Dense drizzle",
-        56: "Light freezing drizzle",
-        57: "Dense freezing drizzle",
-        61: "Slight rain",
-        63: "Moderate rain",
-        65: "Heavy rain",
-        66: "Light freezing rain",
-        67: "Heavy freezing rain",
-        71: "Slight snowfall",
-        73: "Moderate snowfall",
-        75: "Heavy snowfall",
-        77: "Snow grains",
-        80: "Slight rain showers",
-        81: "Moderate rain showers",
-        82: "Violent rain showers",
-        85: "Slight snow showers",
-        86: "Heavy snow showers",
-        95: "Thunderstorm",
-        96: "Thunderstorm with slight hail",
-        99: "Thunderstorm with heavy hail",
+        0: {
+            "description": "Clear sky",
+            "icon_day": "clear-day",
+            "icon_night": "clear-night",
+        },
+        1: {
+            "description": "Mainly clear",
+            "icon_day": "partly-cloudy-day",
+            "icon_night": "partly-cloudy-night",
+        },
+        2: {
+            "description": "Partly cloudy",
+            "icon_day": "partly-cloudy-day",
+            "icon_night": "partly-cloudy-night",
+        },
+        3: {
+            "description": "Overcast",
+            "icon": "overcast",
+        },
+        45: {
+            "description": "Fog",
+            "icon": "fog",
+        },
+        48: {
+            "description": "Depositing rime fog",
+            "icon": "fog",
+        },
+        51: {
+            "description": "Light drizzle",
+            "icon": "drizzle",
+        },
+        53: {
+            "description": "Moderate drizzle",
+            "icon": "drizzle",
+        },
+        55: {
+            "description": "Dense drizzle",
+            "icon": "drizzle",
+        },
+        56: {
+            "description": "Light freezing drizzle",
+            "icon": "sleet",
+        },
+        57: {
+            "description": "Dense freezing drizzle",
+            "icon": "sleet",
+        },
+        61: {
+            "description": "Slight rain",
+            "icon": "rain",
+        },
+        63: {
+            "description": "Moderate rain",
+            "icon": "rain",
+        },
+        65: {
+            "description": "Heavy rain",
+            "icon": "rain",
+        },
+        66: {
+            "description": "Light freezing rain",
+            "icon": "sleet",
+        },
+        67: {
+            "description": "Heavy freezing rain",
+            "icon": "sleet",
+        },
+        71: {
+            "description": "Slight snowfall",
+            "icon": "snow",
+        },
+        73: {
+            "description": "Moderate snowfall",
+            "icon": "snow",
+        },
+        75: {
+            "description": "Heavy snowfall",
+            "icon": "snow",
+        },
+        77: {
+            "description": "Snow grains",
+            "icon": "snow",
+        },
+        80: {
+            "description": "Slight rain showers",
+            "icon": "showers",
+        },
+        81: {
+            "description": "Moderate rain showers",
+            "icon": "showers",
+        },
+        82: {
+            "description": "Violent rain showers",
+            "icon": "thunderstorms",
+        },
+        85: {
+            "description": "Slight snow showers",
+            "icon": "snow",
+        },
+        86: {
+            "description": "Heavy snow showers",
+            "icon": "snow",
+        },
+        95: {
+            "description": "Thunderstorm",
+            "icon": "thunderstorms",
+        },
+        96: {
+            "description": "Thunderstorm with slight hail",
+            "icon": "hail",
+        },
+        99: {
+            "description": "Thunderstorm with heavy hail",
+            "icon": "hail",
+        },
     }
+
+    is_day = forecast_response["current"]["is_day"]
+
+    entry = weather_mapping.get(current_weather_code)
+    icon = ""
+
+    if is_day and "icon_day" in entry:
+        icon = entry["icon_day"]
+    elif not is_day and "icon_night" in entry:
+        icon = entry["icon_night"]
+    elif "icon" in entry:
+        icon = entry["icon"]
 
     description = weather_mapping[current_weather_code]
 
@@ -130,7 +236,8 @@ def city_weather(request, city):
         "city": city,
         "temperature": round(forecast_response['current']['temperature_2m']),
         "apparent_temperature": round(forecast_response['current']['apparent_temperature']),
-        "description": description,
+        "icon": icon,
+        "description": description["description"],
         "air_quality": air_quality,
         "relative_humidity": forecast_response["current"]["relative_humidity_2m"],
         "precipitation_chance": forecast_response["daily"]["precipitation_probability_max"][0],

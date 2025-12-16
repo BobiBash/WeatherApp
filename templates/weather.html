@@ -5,6 +5,7 @@
     <title>Title</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'weather_style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/weather-icons/2.0.12/css/weather-icons.min.css">
 </head>
 <body>
     <div class="sun"></div>
@@ -34,18 +35,17 @@
             </nav>
         </div>
         <div class="weather-wrapper">
+            <div class="title-content">
+                <h2>Current Weather</h2>
+            </div>
             <div class="weather-container">
-                <p>Temperature: {{ temperature }}°C</p>
-                <p>Feels like: {{ apparent_temperature }}°C</p>
-                <p>Condition: {{ description }}</p>
-                <p>Air Quality: {{ air_quality }}</p>
-                <p>Humidity: {{ relative_humidity }}%</p>
-                <p>Precipitation: {{ precipitation_chance }}%</p>
-                <p>Rain: {{ rain }}mm</p>
-                <p>WindSpeed: {{ wind_speed }}km/h</p>
-                <p>WindDirection: {{ wind_direction }}°</p>
-                <p>Sunset: {{ sunset }}</p>
-                <p>Sunrise: {{ sunrise }}</p>
+                <div class="weather-info">
+                    <img class="weather-icon" src="/static/node_modules/@bybas/weather-icons/design/fill/animation-ready/{{ icon }}.svg">
+                    <p class="weather-temp">{{ temperature }}°</p>
+                    <p class="temp-degrees">C</p>
+                    <p class="weather-real-feel">RealFeel {{ apparent_temperature }}°</p>
+                    <p class="weather-description">{{ description }}</p>
+                </div>
             </div>
         </div>
         <div class="hourly-wrapper">
