@@ -4,7 +4,6 @@ html, body {
     height: 100%;
     margin: 0;
     padding: 0;
-    overflow-x: hidden;
 }
 
 body {
@@ -12,20 +11,37 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: auto;
-    padding-top: 100px;
+    padding-top: 178px;
     background-color: #BADBE6;
 }
-/* weather icon and temp */
-.weather-info {
+.weather-wrapper {
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: left;
-    width: 100%;
-    height: 100%;
-    padding: 10px;
-    box-sizing: border-box;
+    flex-direction: column;
+    margin: 15px;
+    width: 563px;
+    height: 294px;
+    overflow: hidden;
+    border: black solid 2px;
+    border-radius: 10px;
+    background-color: #BADBE6;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
+    z-index: 10;
+}
+.title-content {
+    background-color: #fff;
+    border-radius: 6px 6px 0 0;
+    display: flex;
+    font-size: 12px;
+    font-weight: 700;
+    justify-content: space-between;
+    letter-spacing: .5px;
+    margin-bottom: 1px;
+    padding: 2px 10px 2px 10px;
+    text-transform: uppercase;
+}
+.title-content h2 {
+    opacity: .6;
+    font: inherit;
 }
 .weather-icon {
     width: 160px;
@@ -40,11 +56,23 @@ body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     font-weight: 300;
 }
+.hour-row p {
+    padding-left: 20px;
+}
 .temp-degrees {
     opacity: .4;
     margin-left: -48px;
     margin-bottom: 23px;
     font-size: 30px;
+}
+.weather-details {
+    min-width: 200px;
+    display: flex;
+    flex-wrap: wrap;
+    border-bottom: 1px solid rgba(0, 0, 0, .15);
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
 }
 .weather-real-feel {
     font-size: 20px;
@@ -59,6 +87,31 @@ body {
     line-height: 16px;
     margin-bottom: -120px;
     margin-left: -220px;
+}
+.page-subnav {
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    position: absolute;
+    top: 40px; /* Adjust based on where you want it */
+    left: 932px;
+    transform: translateX(-50%);
+    display: flex;
+    z-index: 10;
+}
+.secondary-subnav {
+    display: flex;
+    flex-direction: row;
+}
+.secondary-subnav a {
+    text-decoration: none;
+}
+.subnav-item h2 {
+    padding: 5px 10px;
+    margin: 0;
+    font-size: 20px;
+    color: #333;
 }
 /* nav buttons */
 #site-buttons {
@@ -112,19 +165,6 @@ ul {
 .github-container {
     margin-left: auto;
 }
-
-/* headings */
-h1 {
-    text-align: center;
-    top: -30px;
-    width: 100%;
-    position: relative;
-    z-index: 5;
-    margin-top: 0;
-    padding-top: 20px;
-    color: #D98326;
-}
-
 /* containers */
 #weather_div {
     display: flex;
@@ -132,72 +172,21 @@ h1 {
     margin: 0 auto;
     justify-content: center;
     align-items: center;
-    width: 100%;
-    height: 500px;
-    background-color: #76B7CD;
     overflow: hidden;
 }
-.title-content {
-    background-color: #fff;
-    border-radius: 6px 6px 0 0;
-    display: flex;
-    font-size: 12px;
-    font-weight: 700;
-    justify-content: space-between;
-    letter-spacing: .5px;
-    margin-bottom: 1px;
-    padding: 2px 10px 2px 10px;
-    text-transform: uppercase;
+.weather-container p {
+    padding-left: 20px;
 }
-.title-content h2 {
-    opacity: .6;
-    font: inherit;
-}
-.weather-wrapper {
+.hourly-wrapper {
     display: flex;
     flex-direction: column;
-    margin: 15px;
-    width: 30%;
-    height: 290px;
-    overflow: hidden;
-    border: black solid 2px;
-    border-radius: 10px;
-    background-color: #BADBE6;
-    box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
     z-index: 10;
+    padding-bottom: 100px;
 }
-.page-subnav {
-    width: 100%;
-    align-items: center;
-    justify-content: center;
-    background-color: white;
-    position: absolute;
-    top: 40px; /* Adjust based on where you want it */
-    left: 932px;
-    transform: translateX(-50%);
-    display: flex;
-    z-index: 5;
-}
-.secondary-subnav {
-    display: flex;
-    flex-direction: row;
-}
-.secondary-subnav a {
-    text-decoration: none;
-}
-.subnav-item h2 {
-    padding: 5px 10px;
-    margin: 0;
-    font-size: 20px;
-    color: #333;
-}
-.weather-container {
-    height: 175px;
-    border-radius: 0 0 6px 6px;
-    display: flex;
-    flex-direction: row;
-    flex-grow: 1;
-    justify-content: space-between;
+#hourly_forecast_div {
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 .weather-details-container {
     align-self: center;
@@ -209,49 +198,53 @@ h1 {
     text-align: left;
     margin-right: 20px;
 }
-.weather-details {
-    min-width: 200px;
+.weather-info {
     display: flex;
-    flex-wrap: wrap;
-    border-bottom: 1px solid rgba(0, 0, 0, .15);
-    justify-content: space-between;
+    flex-direction: row;
     align-items: center;
-    padding: 15px;
+    justify-content: left;
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    box-sizing: border-box;
 }
-.weather-details .label {
-    font-size: 16px;
-    font-weight: 400;
-    margin-right: 8px;
+.weather-container {
+    height: 175px;
+    border-radius: 0 0 6px 6px;
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+    justify-content: space-between;
 }
-.weather-details .value {
-    font-size: 18px;
-    font-weight: 700;
-}
-.weather-container p {
-    padding-left: 20px;
-}
-
-.hourly-wrapper {
-    margin: 15px;
-    width: 30%;
-    height: 290px;
+.hour-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     overflow: hidden;
-    border: black solid 2px;
-    border-radius: 10px;
     background-color: #BADBE6;
     box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
     z-index: 10;
 }
 
-#hourly_forecast_div {
-    height: 100%;
-    overflow-y: auto;
-    overflow-x: hidden;
+.hour {
+    font-size: 20px;
+    text-align: left;
+}
+
+.temp {
+    font-size: 20px;
+    text-align: right; /* right-align the numbers */
+}
+
+.rain_probability {
+    font-size: 20px;
+    text-align: end; /* right-align the numbers */
+    margin-left: 0; /* remove the margin */
 }
 
 /* sun and clouds */
 .sun {
-    position: absolute;
+    position: fixed;
     width: 120px;
     height: 120px;
     background: #D98326;
@@ -274,7 +267,7 @@ h1 {
 }
 
 .cloud {
-    position: absolute;
+    position: fixed;
     background: #ECEFF1;
     box-shadow: 10px 10px rgba(0,0,0,0.2);
     border-radius: 100px;

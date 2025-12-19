@@ -1,3 +1,5 @@
+import json
+
 from django.contrib import messages
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
@@ -11,8 +13,6 @@ from requests import ReadTimeout
 
 # Create your views here.
 
-
-
 def search_weather(request):
     city = request.GET.get("city", "").strip()
 
@@ -21,8 +21,8 @@ def search_weather(request):
 
     return render(request, "search.html")
 
-def city_weather(request, city):
-
+def  city_weather(request, city):
+    view_type = request.GET.get("view", "current")
 
     url = f"https://geocoding-api.open-meteo.com/v1/search?name={city}&count=10&language=en&format=json"
     try:
@@ -40,15 +40,16 @@ def city_weather(request, city):
     params = {
         "latitude": lat,
         "longitude": lon,
-        "hourly": ["temperature_2m", 'precipitation_probability'],
+        "hourly": ["temperature_2m","weather_code", "apparent_temperature", "is_day", "relative_humidity_2m", "precipitation_probability",
+                    "wind_speed_10m", "wind_gusts_10m", "wind_direction_10m"],
         "daily": ["sunrise", "sunset", 'precipitation_probability_max'],
         "current": ["temperature_2m","weather_code", "apparent_temperature", "is_day", "relative_humidity_2m", "precipitation", "rain",
-                    "wind_speed_10m", "wind_direction_10m"],
+                    "wind_speed_10m", "wind_gusts_10m", "wind_direction_10m"],
         "timezone": "Europe/Sofia"
     }
 
     forecast_url = "https://api.open-meteo.com/v1/forecast"
-    air_quality_url = f"https://air-quality-api.open-meteo.com/v1/air-quality?latitude={lat}&longitude={lon}&current=european_aqi"
+    air_quality_url = f"https://air-quality-api.open-meteo.com/v1/air-quality?latitude={lat}&longitude={lon}&current=european_aqi&hourly=european_aqi"
     air_quality_json = requests.get(air_quality_url).json()
 
     air_quality_index = air_quality_json["current"]['european_aqi']
@@ -68,28 +69,6 @@ def city_weather(request, city):
 
 
     forecast_response = requests.get(forecast_url, params=params).json()
-
-
-
-
-    #hourly stuff
-    hours = forecast_response["hourly"]["time"]
-    temps = forecast_response["hourly"]['temperature_2m']
-    rain_probability = forecast_response['hourly']['precipitation_probability']
-
-    future_hours = []
-    future_temps = []
-    future_rain_probability = []
-
-
-    for h, temp, rain_prob in zip(hours, temps, rain_probability):
-        dt = datetime.fromisoformat(h)
-        if dt >= datetime.now():
-            future_hours.append(dt.strftime("%I %p"))
-            future_temps.append(temp)
-            future_rain_probability.append(rain_prob)
-
-    hourly_forecast = [{"time": t, "temp": temp, "rain_chance": rain_prob} for t, temp, rain_prob in zip(future_hours[:24], future_temps[:24], future_rain_probability[:24])]
 
     sunset_iso = forecast_response['daily']['sunset'][0]
     sunset_time = datetime.fromisoformat(sunset_iso).strftime("%H:%M")
@@ -218,38 +197,92 @@ def city_weather(request, city):
         },
     }
 
+    def get_weather_icon_and_description(weather_code_func, is_day_func):
+
+        entry = weather_mapping.get(weather_code_func)
+
+        if not entry:
+            return "not-available", "Unknown"
+
+
+        if is_day_func and "icon_day" in entry:
+            icon = entry["icon_day"]
+        elif not is_day_func and "icon_night" in entry:
+            icon = entry["icon_night"]
+        elif "icon" in entry:
+            icon = entry["icon"]
+        else:
+            icon = "not-available"
+
+        return icon, entry["description"]
+
+    # hourly stuff
+    now = datetime.now()
+    future_data = [
+        (datetime.fromisoformat(h), w_code, appa_temp, day, hum, wind_spd, wind_gst, wind_dir, temp, rain_prob, air_q)
+        for h, w_code, appa_temp, day, hum, wind_spd, wind_gst, wind_dir, temp, rain_prob, air_q
+        in zip(
+            forecast_response["hourly"]["time"],
+            forecast_response["hourly"]["weather_code"],
+            forecast_response["hourly"]["apparent_temperature"],
+            forecast_response["hourly"]["is_day"],
+            forecast_response["hourly"]["relative_humidity_2m"],
+            forecast_response["hourly"]["wind_speed_10m"],
+            forecast_response["hourly"]["wind_gusts_10m"],
+            forecast_response["hourly"]["wind_direction_10m"],
+            forecast_response["hourly"]["temperature_2m"],
+            forecast_response["hourly"]["precipitation_probability"],
+            air_quality_json["hourly"]["european_aqi"]
+        )
+        if datetime.fromisoformat(h) >= now
+    ]
+    hourly_forecast = []
+    for t, w_code, appa_temp, day, hum, wind_spd, wind_gst, wind_dir, temp, rain_prob, air_q in future_data[:24]:
+        hourly_icon, hourly_description = get_weather_icon_and_description(w_code, day)
+
+        hourly_forecast.append({
+            "time": t.strftime("%I %p"),
+            "temperature": round(temp),
+            "apparent_temperature": round(appa_temp),
+            "weather_code": w_code,
+            "is_day": day,
+            "humidity": hum,
+            "wind_speed": wind_spd,
+            "wind_gusts": wind_gst,
+            "wind_direction": wind_dir,
+            "rain_chance": rain_prob,
+            "icon": hourly_icon,
+            "description": hourly_description,
+            "air_quality": air_q
+        })
+
     is_day = forecast_response["current"]["is_day"]
+    daily_icon,daily_description = get_weather_icon_and_description(current_weather_code, is_day)
 
-    entry = weather_mapping.get(current_weather_code)
-    icon = ""
-
-    if is_day and "icon_day" in entry:
-        icon = entry["icon_day"]
-    elif not is_day and "icon_night" in entry:
-        icon = entry["icon_night"]
-    elif "icon" in entry:
-        icon = entry["icon"]
-
-    description = weather_mapping[current_weather_code]
 
     context = {
         "city": city,
         "temperature": round(forecast_response['current']['temperature_2m']),
         "apparent_temperature": round(forecast_response['current']['apparent_temperature']),
-        "icon": icon,
-        "description": description["description"],
+        "icon": daily_icon,
+        "description": daily_description,
         "air_quality": air_quality,
         "relative_humidity": forecast_response["current"]["relative_humidity_2m"],
         "precipitation_chance": forecast_response["daily"]["precipitation_probability_max"][0],
         "rain": round(forecast_response["current"]["rain"]),
         "wind_speed": forecast_response["current"]["wind_speed_10m"],
+        "wind_gusts": forecast_response["current"]["wind_gusts_10m"],
         "wind_direction": forecast_response['current']['wind_direction_10m'],
         "sunset": sunset_time,
         "sunrise": sunrise_time,
         "hourly_forecast": hourly_forecast,
     }
 
-    return render(request, "weather.html", context)
+    if view_type == "hourly":
+        context["hourly_forecast"] = json.dumps(hourly_forecast)
+        return render(request, "hourly_weather.html", context)
+    else:
+        return render(request, "weather.html", context)
 
 def autocomplete(request):
     query = request.GET.get('q', '')

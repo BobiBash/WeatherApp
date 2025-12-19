@@ -19,6 +19,16 @@
     <div class="cloud cloud-large cloud8"></div>
     <div class="cloud"></div>
     <h1>Weather for {{ city|title }}</h1>
+    <div class="page-subnav">
+        <div class="secondary-subnav">
+            <a href="{% url 'city_weather' city=city %}?view=current" class="subnav-item">
+                <h2>Current</h2>
+            </a>
+            <a href="{% url 'city_weather' city=city %}?view=hourly" class="subnav-item">
+                <h2>Hourly</h2>
+            </a>
+        </div>
+    </div>
     <div id="weather_div">
         <div id="bottom_site-buttons">
             <nav>
@@ -46,18 +56,18 @@
                     <p class="weather-real-feel">RealFeel {{ apparent_temperature }}°</p>
                     <p class="weather-description">{{ description }}</p>
                 </div>
-            </div>
-        </div>
-        <div class="hourly-wrapper">
-            <div id="hourly_forecast_div">
-                {% for hour in hourly_forecast %}
-                    <div class="hour-row">
-                        <span class="hour">{{ hour.time }}</span>
-                        <span class="separator">-</span>
-                        <span class="temp">{{ hour.temp }}°C</span>
-                        <span class="rain_probability">💧{{ hour.rain_chance }}%</span>
-                    </div>
-                {% endfor %}
+                <div class="weather-details-container">
+                <div class="weather-details">
+                    <span class="label">Wind</span>
+                    <span class="value">{{ wind_speed }}km/h</span>
+                </div>
+                <div class="weather-details">
+                    <span class="label">Wind Gusts</span>
+                    <span class="value">{{ wind_gusts }}km/h</span></div>
+                <div class="weather-details">
+                    <span class="label">Air Quality</span>
+                    <span class="value">{{ air_quality }}</span></div>
+                </div>
             </div>
         </div>
     </div>
