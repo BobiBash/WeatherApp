@@ -33,7 +33,7 @@ Simple Django-based weather application that uses Open-Meteo APIs to show curren
 - `weather_app_orm/` — main app:
   - `views.py` — search, city page, autocomplete (main logic).
   - `templates/` — `search.html`, `weather.html`, `error.html`.
-  - `static/` — JS and CSS assets (`autocompletion.js`, `search_on_click.js`, styles).
+  - `static/` — JS and CSS assets (`autocompletion.js`, styles).
 - `db.sqlite3` — default local database file (if present).
 
 ## External APIs used
