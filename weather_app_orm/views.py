@@ -37,6 +37,7 @@ def  city_weather(request, city):
 
     lat = response["results"][0]["latitude"]
     lon = response["results"][0]["longitude"]
+    print(lat, lon)
     params = {
         "latitude": lat,
         "longitude": lon,
@@ -287,16 +288,26 @@ def  city_weather(request, city):
 def autocomplete(request):
     query = request.GET.get('q', '')
 
+    MIN_THRESHOLD = 5000
+
     if len(query) < 2:
         return JsonResponse([], safe=False)
 
-    url = f"https://geocoding-api.open-meteo.com/v1/search?name={query}&count=5&language=en&format=json"
+    url = f"https://geocoding-api.open-meteo.com/v1/search?name={query}&count=20&language=en&format=json"
 
     response = requests.get(url).json()
     cities = response.get("results", [])
 
-    suggestions = [f"{city['name']}, {city['country']}"
-                   for city in cities]
+    population_mapping = {f"{city["name"]}, {city["country"]}": city.get('population') for city in cities if 'population' in city and city.get('population') > MIN_THRESHOLD}
+    print(population_mapping)
+
+    sorted_by_population = sorted(population_mapping.items(), key=lambda item: item[1], reverse=True)
+    print(sorted_by_population)
+    city_names = [item[0] for item in sorted_by_population]
+
+    suggestions = [city for city in city_names][:5]
+
+    print(suggestions)
 
     return JsonResponse(suggestions, safe=False)
 

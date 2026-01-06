@@ -42,15 +42,26 @@
         <div id="divcontainer">
             <form id="searchbar" method="GET" action="{% url 'search_weather' %}">
             <div class="search-wrapper">
-            <input type="text" id="cityInput" name="city" list="citySuggestions" placeholder="Enter a city..." required>
+            <input type="text" id="cityInput" name="city" list="citySuggestions" onblur="HandleOnBlur()" onfocus="HandleOnFocus()" autocomplete="off" placeholder="Enter a city..." required>
             <button id="searchbutton" type="submit"><i id="searchIcon" class="fa-solid fa-magnifying-glass"></i></button>
+            <ul id="citySuggestions"></ul>
             </div>
-            <datalist id="citySuggestions" onclick=""></datalist>
             </form>
         </div>
     </div>
+    <script>
+    function HandleOnBlur() {
+        setTimeout(() => {
+            document.getElementById('citySuggestions').classList.remove('show');
+        }, 200);
+    }
+
+    function HandleOnFocus() {
+        document.getElementById('citySuggestions').classList.add('show');
+    }
+    </script>
     {% load static %}
     <script src="{% static 'autocompletion.js' %}"></script>
-    <script src="{% static 'search_on_click.js' %}"></script>
+
 </body>
 </html>
