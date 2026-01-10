@@ -8,17 +8,17 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/weather-icons/2.0.12/css/weather-icons.min.css">
 </head>
 <body>
+    <div id="divcontainer">
+        <form id="searchbar" method="GET" action="{% url 'search_weather' %}">
+        <div class="search-wrapper">
+        <input type="text" id="cityInput" name="city" list="citySuggestions" onblur="HandleOnBlur()" onfocus="HandleOnFocus()" autocomplete="off" placeholder="Enter a city..." required>
+        <button id="searchbutton" type="submit"><i id="searchIcon" class="fa-solid fa-magnifying-glass"></i></button>
+        <ul id="citySuggestions"></ul>
+        </div>
+        </form>
+    </div>
+    <h1>Hourly weather for {{ city|title }}</h1>
     <div class="hourly-wrapper" id="hourly-wrapper">
-        <div class="sun"></div>
-        <div class="cloud cloud-large cloud1"></div>
-        <div class="cloud cloud-medium cloud2"></div>
-        <div class="cloud cloud-small cloud3"></div>
-        <div class="cloud cloud-large cloud4"></div>
-        <div class="cloud cloud-medium cloud5"></div>
-        <div class="cloud cloud-small cloud6"></div>
-        <div class="cloud cloud-medium cloud7"></div>
-        <div class="cloud cloud-large cloud8"></div>
-        <div class="cloud"></div>
     </div>
     <div class="page-subnav">
         <div class="secondary-subnav">
@@ -31,17 +31,11 @@
         </div>
     </div>
     <div id="weather_div">
-        <div id="bottom_site-buttons">
-            <nav>
-                <ul>
-                    <li class="github-container"><a href="https://github.com/BobiBash"><img class="github-button" src="{% static 'imgs/Github_Logo.png' %}" alt="GitHub"></a></li>
-                </ul>
-            </nav>
-        </div>
         <div id="site-buttons">
             <nav>
                 <ul>
                     <li><a href="{% url 'search_weather' %}" class="home-button">Home</a></li>
+                    <li class="github-container"><a href="https://github.com/BobiBash"><img class="github-button" src="{% static 'imgs/Github_Logo.png' %}" alt="GitHub"></a></li>
                 </ul>
             </nav>
         </div>
@@ -49,6 +43,28 @@
     <script id="hourly-forecast-data" type="application/json">
         {{ hourly_forecast|safe }}
     </script>
+    <script>
+    function HandleOnBlur() {
+        setTimeout(() => {
+            document.getElementById('citySuggestions').classList.remove('show');
+        }, 200);
+    }
+
+    function HandleOnFocus() {
+        document.getElementById('citySuggestions').classList.add('show');
+    }
+    </script>
+    <script>
+    const BACKGROUND_IMAGES = [
+        "{% static 'imgs/weather_pics/img1.png' %}",
+        "{% static 'imgs/weather_pics/img2.png' %}",
+        "{% static 'imgs/weather_pics/img3.png' %}",
+        "{% static 'imgs/weather_pics/img4.png' %}",
+        "{% static 'imgs/weather_pics/img5.png' %}"
+    ];
+    </script>
+    <script src="{% static 'background_randomizer.js' %}"></script>
     <script src="{% static 'hourly_weather.js' %}"></script>
+    <script src="{% static 'autocompletion.js' %}"></script>
 </body>
 </html>

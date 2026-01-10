@@ -79,7 +79,6 @@ def  city_weather(request, city):
 
     current_weather_code = forecast_response['current']['weather_code']
 
-
     weather_mapping = {
         0: {
             "description": "Clear sky",
@@ -98,7 +97,7 @@ def  city_weather(request, city):
         },
         3: {
             "description": "Overcast",
-            "icon": "overcast",
+            "icon": "cloudy",
         },
         45: {
             "description": "Fog",
@@ -166,11 +165,13 @@ def  city_weather(request, city):
         },
         80: {
             "description": "Slight rain showers",
-            "icon": "showers",
+            "icon_day": "partly-cloudy-day-rain",
+            "icon_night": "partly-cloudy-night-rain",
         },
         81: {
             "description": "Moderate rain showers",
-            "icon": "showers",
+            "icon_day": "partly-cloudy-day-rain",
+            "icon_night": "partly-cloudy-night-rain",
         },
         82: {
             "description": "Violent rain showers",
@@ -178,11 +179,13 @@ def  city_weather(request, city):
         },
         85: {
             "description": "Slight snow showers",
-            "icon": "snow",
+            "icon_day": "partly-cloudy-day-snow",
+            "icon_night": "partly-cloudy-night-snow",
         },
         86: {
             "description": "Heavy snow showers",
-            "icon": "snow",
+            "icon_day": "partly-cloudy-day-snow",
+            "icon_night": "partly-cloudy-night-snow",
         },
         95: {
             "description": "Thunderstorm",
@@ -190,11 +193,11 @@ def  city_weather(request, city):
         },
         96: {
             "description": "Thunderstorm with slight hail",
-            "icon": "hail",
+            "icon": "thunderstorms-hail",
         },
         99: {
             "description": "Thunderstorm with heavy hail",
-            "icon": "hail",
+            "icon": "thunderstorms-hail",
         },
     }
 

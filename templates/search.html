@@ -8,45 +8,28 @@
     <link rel="stylesheet" href="{% static 'search_style.css' %}">
 </head>
 <body>
-    <div class="sun"></div>
-    <div class="cloud cloud-large cloud1"></div>
-    <div class="cloud cloud-medium cloud2"></div>
-    <div class="cloud cloud-small cloud3"></div>
-    <div class="cloud cloud-large cloud4"></div>
-    <div class="cloud cloud-medium cloud5"></div>
-    <div class="cloud cloud-small cloud6"></div>
-    <div class="cloud cloud-medium cloud7"></div>
-    <div class="cloud cloud-large cloud8"></div>
-    <div class="cloud"></div>
-
-    <div id="heading">
-        <h1 class="search-heading">Weather App
-        <img class="heading-icon" src="{% static 'imgs/name-icon.png' %}" alt="Weather">
-        </h1>
-    </div>
-    <div id="center-wrapper">
-        <div id="bottom_site-buttons">
-            <nav>
-                <ul>
-                    <li class="github-container"><a href="https://github.com/BobiBash"><img class="github-button" src="{% static 'imgs/Github_Logo.png' %}" alt="GitHub"></a></li>
-                </ul>
-            </nav>
+    <div>
+        <div id="heading">
+            <h1 class="search-heading">Weather App</h1>
         </div>
-        <div id="site-buttons">
-            <nav>
-                <ul>
-                    <li><a href="http://127.0.0.1:8000" class="home-button">Home</a></li>
-                </ul>
-            </nav>
-        </div>
-        <div id="divcontainer">
-            <form id="searchbar" method="GET" action="{% url 'search_weather' %}">
-            <div class="search-wrapper">
-            <input type="text" id="cityInput" name="city" list="citySuggestions" onblur="HandleOnBlur()" onfocus="HandleOnFocus()" autocomplete="off" placeholder="Enter a city..." required>
-            <button id="searchbutton" type="submit"><i id="searchIcon" class="fa-solid fa-magnifying-glass"></i></button>
-            <ul id="citySuggestions"></ul>
+        <div id="center-wrapper">
+            <div id="site-buttons">
+                <nav class="text_color">
+                    <ul>
+                        <li><a href="http://127.0.0.1:8000" class="home-button">Home</a></li>
+                        <li class="github-container"><a href="https://github.com/BobiBash"><img class="github-button" src="{% static 'imgs/Github_Logo.png' %}" alt="GitHub"></a></li>
+                    </ul>
+                </nav>
             </div>
-            </form>
+            <div id="divcontainer">
+                <form id="searchbar" method="GET" action="{% url 'search_weather' %}">
+                <div class="search-wrapper">
+                <input type="text" id="cityInput" name="city" list="citySuggestions" onblur="HandleOnBlur()" onfocus="HandleOnFocus()" autocomplete="off" placeholder="Enter a city..." required>
+                <button id="searchbutton" type="submit"><i id="searchIcon" class="fa-solid fa-magnifying-glass"></i></button>
+                <ul id="citySuggestions"></ul>
+                </div>
+                </form>
+            </div>
         </div>
     </div>
     <script>
@@ -62,6 +45,16 @@
     </script>
     {% load static %}
     <script src="{% static 'autocompletion.js' %}"></script>
+    <script>
+    const BACKGROUND_IMAGES = [
+        "{% static 'imgs/weather_pics/img1.png' %}",
+        "{% static 'imgs/weather_pics/img2.png' %}",
+        "{% static 'imgs/weather_pics/img3.png' %}",
+        "{% static 'imgs/weather_pics/img4.png' %}",
+        "{% static 'imgs/weather_pics/img5.png' %}"
+    ];
+    </script>
+    <script src="{% static 'background_randomizer.js' %}"></script>
 
 </body>
 </html>
